@@ -4,14 +4,6 @@
   </div>
 </template>
 
-<script setup>
-import { onBeforeMount } from 'vue'
-
-onBeforeMount(() => {
-  console.log(import.meta.env.VITE_BASE_URL)
-})
-</script>
-
 <style>
 @media (min-width: 1024px) {
   .about {
