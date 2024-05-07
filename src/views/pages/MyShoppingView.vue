@@ -36,9 +36,8 @@
         </p>
         <p class="card-text">
           Data de Entrega: {{ purchase.deliveryDate }}
-          <i class="fas fa-check-circle text-success" />
-          <span class="spinner-border spinner-border-sm" />
-          <i class="bi bi-check2-all" />
+          <i class="bi bi-check-circle-fill text-success" />
+          <i class="bi bi-clock-history text-warning" />
         </p>
       </div>
     </div>
