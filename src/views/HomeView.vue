@@ -2,7 +2,6 @@
   <main>
     <HeaderPrivate v-if="isLoggedIn" />
     <HeaderPublic v-if="!isLoggedIn" />
-    <LoginPage />
     <router-view />
     <FooterPrivate v-if="isLoggedIn" />
     <FooterPublic v-if="!isLoggedIn" />
@@ -14,7 +13,7 @@ import HeaderPrivate from '@/views/headers/HeaderPrivateView.vue';
 import HeaderPublic from '@/views/headers/HeaderPublicView.vue';
 import FooterPrivate from '@/views/footers/FooterPrivateView.vue';
 import FooterPublic from '@/views/footers/FooterPublicView.vue';
-import LoginPage from '@/views/pages/auth/LoginPageView.vue';
+// import LoginPage from '@/views/pages/auth/LoginPageView.vue';
 // import SignUpPage from '@/views/pages/auth/SignUpPageView.vue'
 
 export default {
@@ -23,13 +22,26 @@ export default {
     HeaderPublic,
     FooterPrivate,
     FooterPublic,
-    LoginPage
+    // LoginPage
     // SignUpPage
+  },
+  data() {
+    return {
+      isLogged: false,
+    };
   },
   computed: {
     isLoggedIn() {
-      return false;
+      return this.isLogged;
     }
-  }
+  },
+  beforeCreate() {
+    console.log('Vamos fazer login e todos o liugar');
+  },
+  // created: {
+  //   temp() {
+  //     console.log('sfsfsd');
+  //   }
+  // }
 };
 </script>

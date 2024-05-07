@@ -37,15 +37,18 @@
               {{ errors.fieldPassword }}
             </p>
           </div>
-
           <button
             class="btn btn-primary w-100 py-2 mt-5 mb-4"
             type="submit"
+            :disabled="hasSpinner"
           >
-            Entrar
+            <span
+              v-if="hasSpinner"
+              class="spinner-border spinner-border-sm"
+              aria-hidden="true"
+            />
+            <span> Entrar</span>
           </button>
-
-          <font-awesome-icon icon="fa-solid fa-spinner" />
         </form>
       </div>
     </div>
@@ -54,7 +57,7 @@
 
 <script lang="ts">
 import type { LoginPayload } from '@/core/models';
-import { AuthenticationService } from '@/core/services/authentication.service';
+import { Authentication } from '@/core/services/authentication';
 
 export default {
   data() {
@@ -64,11 +67,18 @@ export default {
       errors: {
         fieldEmail: '',
         fieldPassword: '',
-      }
+      },
+      spinner: false,
     };
+  },
+  computed:{
+    hasSpinner() {
+      return this.spinner;
+    },
   },
   methods: {
 
+    
     async onSubmit() {
       this.errors.fieldEmail ='';
       this.errors.fieldPassword ='';
@@ -80,19 +90,22 @@ export default {
         this.errors.fieldPassword = 'Este campo é obrigatório';
       }
 
+      this.spinner = true;
      
-      console.log(this.fieldEmail);
+      // console.log(this.fieldEmail);
 
       const payload: LoginPayload = {
         email: this.fieldEmail,
         password: this.fieldPassword
       };
       
-      const authService = new AuthenticationService();
+      const authService = new Authentication();
       try {
         const responseData = await authService.login(payload);
-        console.log(responseData);
+        // console.log(responseData);
+        this.spinner = false;
       } catch (error) {
+        this.spinner = false;
         console.error(error);
       }
       

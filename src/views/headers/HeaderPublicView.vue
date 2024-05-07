@@ -26,6 +26,7 @@
           <button
             type="button"
             class="btn btn-primary"
+            @click="handleRegister"
           >
             Criar uma conta
           </button>
@@ -33,7 +34,6 @@
             type="button"
             class="btn btn-light"
             @click="handleLogin"
-            target="_blank"
           >
             Fazer login
           </button>
@@ -43,20 +43,14 @@
   </header>
 </template>
 <script>
-import { AuthenticationService } from '@/core/services/authentication.service.ts';
 
 export default {
   methods: {
     handleLogin() {
-      const authService = new AuthenticationService();
-      authService
-        .login()
-        .then((responseData) => {
-          console.log(responseData);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      this.$router.push('/login');
+    },
+    handleRegister() {
+      this.$router.push('/register');
     }
   }
 };
