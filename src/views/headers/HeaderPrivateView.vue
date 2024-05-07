@@ -12,7 +12,9 @@
           <li><a href="#" class="nav-link px-2 link-body-emphasis me-3">Painel</a></li>
           <li><a href="#" class="nav-link px-2 link-body-emphasis me-3">Minhas compras</a></li>
           <li><a href="#" class="nav-link px-2 link-body-emphasis me-3">Produtos</a></li>
-          <li><a href="#" class="nav-link px-2 link-body-emphasis me-3">Produtos2</a></li>
+          <li class="nav-link px-2 link-body-emphasis me-3">
+            <router-link to="{name: 'product'}">Produtos2</router-link>
+          </li>
         </ul>
 
         <div class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">

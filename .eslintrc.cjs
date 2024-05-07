@@ -1,26 +1,22 @@
 /* eslint-env node */
-require('@rushstack/eslint-patch/modern-module-resolution')
+require('@rushstack/eslint-patch/modern-module-resolution');
 
 module.exports = {
-  root: true,
-  'extends': [
-    'plugin:vue/vue3-essential',
-    'eslint:recommended',
-    '@vue/eslint-config-typescript',
-    '@vue/eslint-config-prettier/skip-formatting'
-  ],
+  extends: ['eslint:recommended', 'plugin:vue/strongly-recommended', '@vue/eslint-config-typescript'],
   overrides: [
-    {
-      files: [
-        'cypress/e2e/**/*.{cy,spec}.{js,ts,jsx,tsx}',
-        'cypress/support/**/*.{js,ts,jsx,tsx}'
-      ],
-      'extends': [
-        'plugin:cypress/recommended'
-      ]
-    }
+
   ],
   parserOptions: {
-    ecmaVersion: 'latest'
+    ecmaVersion: 'latest',
+    sourceType: 'module'
+  },
+  // ignorePatterns: ['vite.config.ts'],
+  plugins: ['vue'],
+  rules: {
+    semi: ['error', 'always'],
+    quotes: ['error', 'single'],
+    indent: ['error', 2],
+    'comma-spacing': ['error', { before: false, after: true }],
+    'vue/no-multi-spaces':1,
   }
-}
+};
