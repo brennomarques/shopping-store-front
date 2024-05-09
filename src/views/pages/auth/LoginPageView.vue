@@ -1,5 +1,10 @@
 <template>
   <div class="container">
+    <AlertMessage
+      :message="alertMessage.message"
+      :visible="alertMessage.showAlert"
+      :type="alertMessage.typeMessage"
+    />
     <div class="row d-flex justify-content-center align-items-center">
       <div class="col-4 shadow-sm bg-body-tertiary rounded p-3">
         <form @submit.prevent="onSubmit">
@@ -56,10 +61,14 @@
 </template>
 
 <script lang="ts">
+import AlertMessage from '@/components/AlertMessage.vue';
 import type { LoginPayload } from '@/core/models';
 import { Authentication } from '@/core/services/authentication';
 
 export default {
+  components: {
+    AlertMessage
+  },
   data() {
     return {
       fieldEmail: '',
@@ -69,6 +78,11 @@ export default {
         fieldPassword: '',
       },
       spinner: false,
+      alertMessage: {
+        message: 'information saved successfully',
+        showAlert: false,
+        typeMessage: '',
+      }
     };
   },
   computed:{
@@ -77,7 +91,17 @@ export default {
     },
   },
   methods: {
+    showMessage(msg: string, typeMessage: string) {
+      this.alertMessage = {
+        message: msg,
+        showAlert: true,
+        typeMessage: typeMessage,
+      };
 
+      setTimeout(() => {
+        this.alertMessage.showAlert = false;
+      }, 3000);
+    },
     
     async onSubmit() {
       this.errors.fieldEmail ='';
@@ -85,27 +109,27 @@ export default {
 
       if (!this.fieldEmail) {
         this.errors.fieldEmail = 'Este campo é obrigatório';
+        return;
       }
       if (!this.fieldPassword) {
         this.errors.fieldPassword = 'Este campo é obrigatório';
+        return;
       }
 
       this.spinner = true;
      
-      // console.log(this.fieldEmail);
-
       const payload: LoginPayload = {
         email: this.fieldEmail,
         password: this.fieldPassword
       };
       
-      const authService = new Authentication();
       try {
-        const responseData = await authService.login(payload);
-        // console.log(responseData);
+        await new Authentication().login(payload);
         this.spinner = false;
+        window.location.href = 'dashboard';
       } catch (error) {
         this.spinner = false;
+        this.showMessage('Usuário ou senha incorretos, tente novamente.', 'error');
         console.error(error);
       }
       

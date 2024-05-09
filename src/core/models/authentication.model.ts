@@ -6,6 +6,7 @@ export interface RegisterPayload {
   name: string;
   email: string;
   password: string;
+  c_password: string;
 }
 export interface Credentials {
   access_token: string;

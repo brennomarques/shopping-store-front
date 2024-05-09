@@ -4,11 +4,11 @@
   </div>
 </template>
 <script>
-import TheWelcome from '@/components/TheWelcome.vue'
+import TheWelcome from '@/components/TheWelcome.vue';
 export default {
   components: {
     TheWelcome
   }
-}
+};
 </script>
 <style lang=""></style>
