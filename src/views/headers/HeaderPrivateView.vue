@@ -4,21 +4,65 @@
       <div
         class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
       >
-        <a class="navbar-brand me-4" href="#">
-          <img src="@/assets/logo.svg" alt="Bootstrap" width="50" height="50" />
-        </a>
+        <router-link
+          to="/dashboard"
+          class="navbar-brand me-4"
+        >
+          <img
+            src="@/assets/logo.svg"
+            alt="Bootstrap"
+            width="50"
+            height="50"
+          >
+        </router-link>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="#" class="nav-link px-2 link-body-emphasis me-3">Painel</a></li>
-          <li><a href="#" class="nav-link px-2 link-body-emphasis me-3">Minhas compras</a></li>
-          <li><a href="#" class="nav-link px-2 link-body-emphasis me-3">Produtos</a></li>
-          <li class="nav-link px-2 link-body-emphasis me-3">
-            <router-link to="{name: 'product'}">Produtos2</router-link>
+          <li class="nav-item">
+            <!-- Utilizando o Router Link para abrir a rota /product -->
+            <router-link
+              to="/dashboard"
+              class="nav-link px-2 link-body-emphasis me-3"
+            >
+              Dashboard
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link
+              to="/shopping"
+              class="nav-link px-2 link-body-emphasis me-3"
+            >
+              Minhas compras
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link
+              to="/product"
+              class="nav-link px-2 link-body-emphasis me-3"
+            >
+              Produtos
+            </router-link>
+          </li>
+   
+          <li class="nav-item">
+            <router-link
+              to="/order"
+              class="nav-link px-2 link-body-emphasis me-3"
+            >
+              Meu carrinho
+            </router-link>
           </li>
         </ul>
 
-        <div class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-          <input type="search" class="form-control" placeholder="Search..." aria-label="Search" />
+        <div
+          class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3"
+          role="search"
+        >
+          <input
+            type="search"
+            class="form-control"
+            placeholder="Search..."
+            aria-label="Search"
+          >
         </div>
 
         <div class="dropdown text-end">
@@ -34,13 +78,33 @@
               width="32"
               height="32"
               class="rounded-circle"
-            />
+            >
           </a>
           <ul class="dropdown-menu text-small">
-            <li><a class="dropdown-item" href="#">Minhas Compras</a></li>
-            <li><a class="dropdown-item" href="#">Perfil</a></li>
-            <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="#">Sair</a></li>
+            <li>
+              <router-link
+                to="/shopping"
+                class="dropdown-item"
+              >
+                Minhas compras
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                to="/profile"
+                class="dropdown-item"
+              >
+                Perfil
+              </router-link>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="#"
+                @click="logout"
+              >Sair</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -48,6 +112,13 @@
   </header>
 </template>
 <script>
-export default {}
+export default {
+  methods: {
+    logout(){
+      console.log('application Logout');
+    }
+    
+  }
+};
 </script>
 <style lang=""></style>

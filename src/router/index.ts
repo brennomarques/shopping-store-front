@@ -3,7 +3,7 @@ import HomeView from '@/views/HomeView.vue';
 import ProductsView from '@/views/pages/ProductsView.vue';
 import Page404View from '@/views/pages/error/Page404View.vue';
 import AboutView from '@/views/pages/AboutView.vue';
-import DashaboardView from '@/views/pages/DashaboardView.vue';
+import DashboardView from '@/views/pages/DashboardView.vue';
 import LoginPageView from '@/views/pages/auth/LoginPageView.vue';
 import { Authorization } from '@/core/services';
 import SignUpPageView from '@/views/pages/auth/SignUpPageView.vue';
@@ -29,7 +29,7 @@ const router = createRouter({
     {
       path: '/dashboard',
       name: 'dashboard',
-      component: DashaboardView
+      component: DashboardView
     },
     {
       path: '/order',

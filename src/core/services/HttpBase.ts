@@ -1,43 +1,45 @@
 // import axios, { type AxiosResponse } from 'axios'
 
-import axios, { AxiosError, type AxiosResponse } from 'axios';
+import axios, { type AxiosResponse } from 'axios';
+import { Authorization } from './authorization';
 
 export abstract class HttpBase {
-  private baseUrl: string;
+  
   protected endpoint: string;
 
   constructor() {
-    this.baseUrl = import.meta.env.VITE_BASE_URL as string;
     this.endpoint = '';
-  }
 
-  async getAsync(): Promise<AxiosResponse> {
-    try {
-      const response = await axios.get(`${this.baseUrl}${this.endpoint}`);
-      return response;
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        console.error(axiosError.toJSON());
-        throw new Error(`HTTP GET error! ${axiosError.message}`);
-      } else {
-        console.error('Unknown error:', error);
-        throw new Error('Unknown error occurred.');
+    axios.interceptors.request.use((config) => {
+      
+      config.baseURL = import.meta.env.VITE_BASE_URL as string;
+      config.headers.Accept = 'application/json';
+      config.headers['Content-Type'] = 'application/json';
+      // const requiresToken = config.url && config.url.includes('/api/protected');
+
+      const credentials = new Authorization().getAuthenticated();
+
+      if (credentials && credentials.access_token) {
+        config.headers.Authorization = `Bearer ${credentials.access_token}`;
       }
+
+      return config;
+    });
+  }  
+
+  async findAll(searchParam?: string): Promise<AxiosResponse> {
+    let endpoint = this.endpoint;
+
+    if (searchParam) {
+      endpoint += `?search=${searchParam}`;
     }
+
+    const response = await axios.get(endpoint);
+    return response;
   }
 
-  async create(payload: any, config?: any) {
-    if (!config) {
-      // eslint-disable-next-line no-param-reassign
-      config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json'
-        }
-      };
-    }
-    const response = await axios.post(`${this.baseUrl}${this.endpoint}`, payload, config);
+  async create(payload: any): Promise<AxiosResponse<any, any>> {
+    const response = await axios.post(this.endpoint, payload);
     return response;
   }
 }

@@ -21,7 +21,19 @@ export class Authorization {
     }
   }
 
-  isAuthenticated(): boolean {
+  static isAuthenticated(): boolean {
+    const credentialsVal = localStorage.getItem(credentialsKey);
+    
+    // Nega acesso se não houver credenciais salvas no localStorage
+    if (!credentialsVal) {
+      return false;
+    }    
+    const credentials = JSON.parse(credentialsVal);
+
+    return credentials;
+  }
+
+  getAuthenticated(): any {
     const credentialsVal = localStorage.getItem(credentialsKey);
     
     // Nega acesso se não houver credenciais salvas no localStorage
@@ -34,11 +46,7 @@ export class Authorization {
   }
 
   getCredentials() {
-    // if (this._tempAccessToken) {
-    //   return this._tempAccessToken;
-    // }
-
-    // return this._credentials ? this._credentials.access_token : null;
+    return localStorage.getItem(credentialsKey);
   }
 
   setCredentials(credentials: Credentials) {

@@ -3,15 +3,3 @@
 .bb {
   border: 1px solid red;
 }
-
-.rodape {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
-
-.main {
-  position: relative;
-  padding-bottom: 100px; /* altura do rodapé */
-}
-

@@ -26,7 +26,7 @@
           :key="index"
         >
           <td>{{ product.name }}</td>
-          <td>{{ product.stock }}</td>
+          <td>{{ product.stockQuantity }}</td>
           <td>R$ {{ product.price.toFixed(2) }}</td> <!-- Adicionando o preço formatado -->
           <td>
             <button
@@ -62,16 +62,17 @@
 </template>
 
 <script>
+import { Product } from '@/core/services/product';
+
 export default {
   data() {
     return {
-      products: [
-        { name: 'Produto A', stock: 10, price: 25.99 },
-        { name: 'Produto B', stock: 5, price: 15.50 },
-        { name: 'Produto C', stock: 15, price: 35.75 },
-      ],
+      products:[],
       selectedProduct: null,
     };
+  },
+  created() {
+    this.getProduct();
   },
   methods: {
     selectProduct(index) {
@@ -84,10 +85,18 @@ export default {
         this.selectedProduct = null; // Limpar produto selecionado após usar
       }
     },
+    async getProduct() {     
+      try {
+        const responseData = await new Product().getAll();
+        this.products = responseData;        
+      } catch (error) {
+        console.error(error);
+      }
+    }
   },
 };
 </script>
 
 <style>
-/* Adicione estilos personalizados aqui, se necessário */
+
 </style>
