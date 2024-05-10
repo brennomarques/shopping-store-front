@@ -7,6 +7,9 @@ import LoginPageView from '@/views/pages/auth/LoginPageView.vue';
 import { Authorization } from '@/core/services';
 import SignUpPageView from '@/views/pages/auth/SignUpPageView.vue';
 import MyShoppingView from '@/views/pages/MyShoppingView.vue';
+import OrderView from '@/views/pages/OrderView.vue';
+import ListProductView from '@/views/pages/ListProductView.vue';
+import ProfileView from '@/views/pages/ProfileView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,34 +41,39 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/',
+      redirect: 'dashboard',
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/dashboard',
+      name: 'dashboard',
       component: DashboardView,
       meta: { requiresAuth: true },
-      children: [
-        {
-          path: '/',
-          redirect: 'dashboard',
-          meta: { requiresAuth: true },
-        },
-        {
-          path: 'dashboard',
-          name: 'dashboard',
-          component: DashboardView,
-          meta: { requiresAuth: true },
-        },
-        {
-          path: 'shopping',
-          name: 'shopping',
-          component: MyShoppingView,
-          meta: { requiresAuth: true },
-        },
-        {
-          path: 'product',
-          name: 'product',
-          component: ProductsView,
-          meta: { requiresAuth: true },
-        },
-      ]
+    },
+    {
+      path: '/shopping',
+      name: 'shopping',
+      component: MyShoppingView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/product',
+      name: 'product',
+      component: ListProductView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/order',
+      name: 'order',
+      component: OrderView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: ProfileView,
+      meta: { requiresAuth: true },
     },
     {
       path: '/:pathMatch(.*)*',

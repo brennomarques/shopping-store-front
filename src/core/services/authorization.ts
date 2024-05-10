@@ -61,4 +61,8 @@ export class Authorization {
     
   }
 
+  cleanCredentials() {
+    localStorage.removeItem(credentialsKey);
+  }
+
 }

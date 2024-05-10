@@ -15,7 +15,7 @@ export class Authentication extends HttpBase {
       .then(response => this.processResponse(response.data))
       .then(data => this.setCredentials(data))
       .catch(error => {
-        throw new Error(error);
+        throw error;
       });
   }
 

@@ -123,15 +123,28 @@ export default {
         password: this.fieldPassword
       };
       
-      try {
-        await new Authentication().login(payload);
-        this.spinner = false;
-        window.location.href = 'dashboard';
-      } catch (error) {
-        this.spinner = false;
-        this.showMessage('Usuário ou senha incorretos, tente novamente.', 'error');
-        console.error(error);
-      }
+      await new Authentication().login(payload)
+        .then(() => {
+          this.spinner = false;
+          window.location.href = 'dashboard';
+        })
+        .catch(error => {
+          this.spinner = false;
+          this.showMessage('Usuário ou senha incorretos, tente novamente.', 'error');
+          console.error(error);
+        });
+
+
+
+      // try {
+      //   await new Authentication().login(payload);
+      //   this.spinner = false;
+      //   window.location.href = 'dashboard';
+      // } catch (error) {
+      //   this.spinner = false;
+      //   this.showMessage('Usuário ou senha incorretos, tente novamente.', 'error');
+      //   console.error(error);
+      // }
       
     }
   }

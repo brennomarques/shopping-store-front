@@ -170,9 +170,8 @@ export default {
         c_password: this.fieldCPassword,
       };
       
-      const authRegister = new RegisterUser();
       try {
-        await authRegister.register(payload);
+        await new RegisterUser().register(payload);
         this.spinner = false;
         this.showMessage('Cadastro realizado com sucesso! Agora é só fazer login e começar a usar.', 'success');
       } catch (error) {

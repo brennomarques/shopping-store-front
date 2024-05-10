@@ -38,7 +38,7 @@ export abstract class HttpBase {
     return response;
   }
 
-  async create(payload: any): Promise<AxiosResponse<any, any>> {
+  async create(payload?: any): Promise<AxiosResponse<any, any>> {
     const response = await axios.post(this.endpoint, payload);
     return response;
   }

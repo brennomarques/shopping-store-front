@@ -112,10 +112,20 @@
   </header>
 </template>
 <script>
+import { Logout } from '@/core/services/logout';
+
 export default {
   methods: {
-    logout(){
+    async logout(){
       console.log('application Logout');
+      await new Logout().logout()
+        .then(() => {
+          window.location.href = '/login';
+        })
+        .catch(error => {
+          console.error(error);
+        });
+
     }
     
   }

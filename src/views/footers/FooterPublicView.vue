@@ -26,10 +26,12 @@
         >Ajuda</a>
       </li>
       <li class="nav-item">
-        <a
-          href="#"
+        <router-link
+          to="/about"
           class="nav-link px-2 text-body-secondary"
-        >Sobre</a>
+        >
+          Sobre
+        </router-link>
       </li>
     </ul>
     <p class="text-center text-body-secondary">

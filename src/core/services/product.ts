@@ -11,7 +11,7 @@ export class Product extends HttpBase {
     return super.findAll(searchParam)
       .then(response => this.processResponse(response.data))
       .catch(error => {
-        throw new Error(error);
+        throw error;
       });
   }
 
