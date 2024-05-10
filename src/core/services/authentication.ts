@@ -2,6 +2,7 @@ import { HttpBase } from './HttpBase';
 
 import type { Credentials, LoginPayload } from '@/core/models/authentication.model';
 import { Authorization } from './authorization';
+import { User } from './User';
 
 export class Authentication extends HttpBase {
   constructor() {
@@ -14,6 +15,7 @@ export class Authentication extends HttpBase {
     return super.create(payload)
       .then(response => this.processResponse(response.data))
       .then(data => this.setCredentials(data))
+      .then(() => this.LoggedUser())
       .catch(error => {
         throw error;
       });
@@ -29,5 +31,12 @@ export class Authentication extends HttpBase {
 
   private setCredentials(data: Credentials): void {
     new Authorization().setCredentials(data); 
+  }
+
+  private async LoggedUser(): Promise<void> {
+    const data = await new User().me();
+    if (data) {
+      new Authorization().setUser(data);
+    }
   }
 }

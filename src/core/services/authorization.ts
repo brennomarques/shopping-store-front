@@ -65,4 +65,23 @@ export class Authorization {
     localStorage.removeItem(credentialsKey);
   }
 
+  setUser(loggedUser: LoggedUser) {
+    console.log('loggedUser');
+    console.log(loggedUser);
+    const savedUser = localStorage.getItem(usersKey);
+    if (savedUser) {
+      localStorage.removeItem(usersKey);
+    }
+    localStorage.setItem(usersKey, JSON.stringify(loggedUser));
+  }
+
+  getUser(): LoggedUser | null {
+    return this.user;
+  }
+
+  public cleanUser():void {
+    localStorage.removeItem(usersKey);
+  }
+
+
 }

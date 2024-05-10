@@ -1,5 +1,10 @@
 <template>
   <div class="container mt-5">
+    <AlertMessage
+      :message="alertMessage.message"
+      :visible="alertMessage.showAlert"
+      :type="alertMessage.typeMessage"
+    />
     <h1 class="text-center mb-4">
       Perfil do Usuário
     </h1>
@@ -26,6 +31,7 @@
             type="email"
             class="form-control"
             id="email"
+            readonly
             v-model="user.email"
           >
         </div>
@@ -52,27 +58,54 @@
   </div>
 </template>
   
-<script>
+<script lang="ts">
+import AlertMessage from '@/components/AlertMessage.vue';
+import { Authorization } from '@/core/services';
+
 export default {
+  components: {
+    AlertMessage
+  },
   data() {
     return {
       user: {
-        username: 'JohnDoe',
-        email: 'johndoe@example.com',
-        // Outros dados do usuário...
+        username: '',
+        email: '',
       },
-      password: '', // Senha temporária para atualização
+      password: '',
+      alertMessage: {
+        message: 'information saved successfully',
+        showAlert: false,
+        typeMessage: '',
+      }, 
     };
   },
+  created() {
+    this.prepareUser();
+  },  
   methods: {
+    prepareUser() {
+      const user = new Authorization().getUser();
+      this.user = {
+        username: user!.name,
+        email: user!.email,
+      };
+    },
+
+    showMessage(msg: string, typeMessage: string) {
+      this.alertMessage = {
+        message: msg,
+        showAlert: true,
+        typeMessage: typeMessage,
+      };
+
+      setTimeout(() => {
+        this.alertMessage.showAlert = false;
+      }, 4000);
+    },
+
     updateProfile() {
-      // Aqui você pode adicionar lógica para enviar os dados atualizados para o servidor
-      const updatedUser = { ...this.user, password: this.password };
-      console.log('Dados atualizados:', updatedUser);
-  
-      // Limpar campo de senha após atualização
-      this.password = '';
-      alert('Perfil atualizado com sucesso!');
+      this.showMessage(`O usuário ${this.user.username} foi atualizado`, 'success');
     },
   },
 };

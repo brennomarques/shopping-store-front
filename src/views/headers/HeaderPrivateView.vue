@@ -57,12 +57,9 @@
           class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3"
           role="search"
         >
-          <input
-            type="search"
-            class="form-control"
-            placeholder="Search..."
-            aria-label="Search"
-          >
+          <h5 class="text-primary-emphasis">
+            {{ user.username }}
+          </h5>
         </div>
 
         <div class="dropdown text-end">
@@ -111,11 +108,32 @@
     </div>
   </header>
 </template>
-<script>
+<script lang="ts">
+import { Authorization } from '@/core/services';
 import { Logout } from '@/core/services/logout';
 
 export default {
+  data() {
+    return {
+      user: {
+        username: '',
+        email: '',
+      },
+    };
+  },
+
+  created() {
+    this.prepareUser();
+  },
   methods: {
+    prepareUser() {
+      const user = new Authorization().getUser();
+      this.user = {
+        username: user!.name,
+        email: user!.email,
+      };
+    },
+
     async logout(){
       console.log('application Logout');
       await new Logout().logout()
@@ -125,7 +143,6 @@ export default {
         .catch(error => {
           console.error(error);
         });
-
     }
     
   }

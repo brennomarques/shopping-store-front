@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import ProductsView from '@/views/pages/ProductsView.vue';
 import Page404View from '@/views/pages/error/Page404View.vue';
 import AboutView from '@/views/pages/AboutView.vue';
 import DashboardView from '@/views/pages/DashboardView.vue';

@@ -10,6 +10,7 @@ export class Logout extends HttpBase {
   public async logout(): Promise<void> {
     return super.create()
       .then(() => this.cleanCredentials())
+      .then(() => this.cleanUser())
       .catch(error => {
         throw error;
       });
@@ -17,6 +18,10 @@ export class Logout extends HttpBase {
 
   private cleanCredentials(): void {
     new Authorization().cleanCredentials(); 
+  }
+
+  private cleanUser(): void {
+    new Authorization().cleanUser(); 
   }
   
 }

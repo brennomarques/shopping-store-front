@@ -5,5 +5,7 @@ export * from './registerUser';
 export * from './product';
 export * from './productCart';
 export * from './logout';
+export * from './User';
+
 
 
