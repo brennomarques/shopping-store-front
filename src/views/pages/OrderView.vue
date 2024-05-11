@@ -223,12 +223,7 @@ export default {
         })
         .catch(error => {
           this.spinner = false;
-          if (error.response && error.response.status === 409) {
-            const responseMessage = error.response.data.message.message + ': ' + error.response.data.message.name;
-            this.showMessage(responseMessage, 'error');
-            return;
-          }
-          this.showMessage('Não foi possível finalizar a sua compra, tente novamente.', 'error');
+          this.showMessage(error.response.data.message, 'error');          
         });
 
     }
