@@ -13,14 +13,14 @@
           Compra #{{ index + 1 }}
         </h5>
         <p class="card-text">
-          Data da Compra: {{ purchase.date }}
+          Data da Compra: {{ formatDate(purchase.created_at).date }}
         </p>
         <p class="card-text">
           Itens Comprados:
         </p>
         <ul class="list-group">
           <li
-            v-for="(item, i) in purchase.items"
+            v-for="(item, i) in purchase.order_items"
             :key="i"
             class="mt-1 list-group-item d-flex justify-content-between align-items-center"
           >
@@ -32,60 +32,75 @@
           class="badge bg-primary mt-1"
           style="font-size: 15px;"
         >
-          Valor Total da Compra: R$ {{ calculateTotal(purchase.items) }}
+          Valor Total da Compra: R$ {{ calculateTotal(purchase.order_items) }}
         </p>
         <p class="card-text">
-          Data de Entrega: {{ purchase.deliveryDate }}
-          <i class="bi bi-check-circle-fill text-success" />
-          <i class="bi bi-clock-history text-warning" />
+          Data de Entrega: {{ formatDate(purchase.delivery_at).date }}
+          <i
+            v-if="!shouldDateDelivery(purchase.delivery_at)"
+            class="bi bi-check-circle-fill text-success"
+          />
+          <i
+            v-if="shouldDateDelivery(purchase.delivery_at)"
+            class="bi bi-clock-history text-warning"
+          />
         </p>
       </div>
     </div>
   </div>
 </template>
   
-<script>
+<script lang="ts">
+import { Format } from '@/core/helpers/format';
+import type { purchases } from '@/core/models';
+import { Order } from '@/core/services/order';
+
 export default {
   data() {
     return {
-      purchases: [
-        {
-          date: '2024-05-15',
-          deliveryDate: '2024-05-18',
-          items: [
-            { name: 'Produto A', quantity: 2, price: 50 },
-            { name: 'Produto B', quantity: 1, price: 30 },
-          ],
-        },
-        {
-          date: '2024-04-20',
-          deliveryDate: '2024-04-25',
-          items: [
-            { name: 'Produto C', quantity: 3, price: 40 },
-            { name: 'Produto D', quantity: 1, price: 60 },
-          ],
-        },
-        // Outras compras...
-      ],
+      purchases: [] as purchases[],
     };
   },
+  created() {
+    this.orderHistory();
+  },
   methods: {
-    calculateTotal(items) {
+    calculateTotal(items: any) {
       let total = 0;
-      items.forEach((item) => {
+      items.forEach((item: any) => {
         total += item.quantity * item.price;
       });
       return total;
     },
+
+    formatDate(dateTime: any) {
+      return Format.formatDate(dateTime);
+    },
+
+    shouldDateDelivery(dateTime: any) {
+      const providedDate = new Date(dateTime);
+      const currentDate = new Date();
+      return providedDate > currentDate;
+    },
+
+    async orderHistory() {
+      await new Order().getAll('status=1')
+        .then((data) => {
+          console.log(data);
+          this.purchases = data;
+        })
+        .catch(error => {
+          console.error(error);    
+        });
+    }
   },
 };
 </script>
   
-  <style>
-  /* Adicione estilos personalizados aqui, se necessário */
+<style>
   .list-group-item {
-    background-color: rgba(0, 0, 0, 0.1); /* Cor de fundo leve */
-    border-color: rgba(0, 0, 0, 0.2); /* Cor da borda leve */
+    background-color: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.2); 
   }
-  </style>
+</style>
   

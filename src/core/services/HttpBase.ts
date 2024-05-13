@@ -31,7 +31,7 @@ export abstract class HttpBase {
     let endpoint = this.endpoint;
 
     if (searchParam) {
-      endpoint += `?search=${searchParam}`;
+      endpoint += `?${searchParam}`;
     }
 
     const response = await axios.get(endpoint);

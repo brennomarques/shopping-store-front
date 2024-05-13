@@ -5,7 +5,6 @@ export interface ProductsResponse {
     price: number;
     stockQuantity: number;
 }
-
 export interface ProductsCart {
     id: string
     name: string;
