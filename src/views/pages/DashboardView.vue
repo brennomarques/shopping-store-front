@@ -4,7 +4,6 @@
       Dashboard
     </h1>
 
-    <!-- Informações de pedidos -->
     <div class="card mb-4">
       <div class="card-header bg-primary text-white">
         Informações de Pedidos
@@ -22,7 +21,6 @@
       </div>
     </div>
 
-    <!-- Informações de compras -->
     <div class="card">
       <div class="card-header bg-info text-white">
         Informações de Compras
@@ -46,7 +44,7 @@
 export default {
   data() {
     return {
-      totalPedidos: 100, // Exemplo de dados (substitua pelos seus dados reais)
+      totalPedidos: 100,
       pedidosPendentes: 20,
       pedidosConcluidos: 80,
       totalCompras: 50,
@@ -58,7 +56,7 @@ export default {
 </script>
 
 <style>
-/* Estilos adicionais podem ser aplicados aqui */
+
 .card-header {
   font-size: 1.2rem;
 }
