@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="container mt-5">
     <AlertMessage
       :message="alertMessage.message"
@@ -96,8 +96,6 @@
         <span> Finalizar Compra</span>
       </button>
 
-  
-      <!-- Modal -->
       <ModalDefault @formSubmitted="handleFormSubmitted" />
     </div>
   </div>
@@ -235,4 +233,180 @@ export default {
 
 <style scoped>
 
+</style> -->
+
+<template>
+  <div class="container mt-4">
+    <AlertMessage
+      :message="alertMessage.message"
+      :visible="alertMessage.showAlert"
+      :type="alertMessage.typeMessage"
+    />
+    <h1 class="mb-4 d-flex align-items-center justify-content-center">
+      Meu Carrinho
+    </h1>
+    <div
+      v-if="cart.length === 0"
+      class="alert alert-info mt-5"
+    >
+      Seu carrinho está vazio.
+    </div>
+    
+    <div
+      v-else
+      class="mt-5"
+    >
+      <div class="row mb-3">
+        <div class="col-md-1">
+          <strong>Imagem</strong>
+        </div>
+        <div class="col-md-3">
+          <strong>Nome do Produto</strong>
+        </div>
+        <div class="col-md-2">
+          <strong>Preço Unitário</strong>
+        </div>
+        <div class="col-md-2">
+          <strong>Quantidade</strong>
+        </div>
+        <div class="col-md-2">
+          <strong>Preço Total</strong>
+        </div>
+        <div class="col-md-1">
+          <strong>Ação</strong>
+        </div>
+      </div>
+      <div
+        class="row mb-3"
+        v-for="(item, index) in cart"
+        :key="index"
+      >
+        <div class="col-md-1">
+          <img
+            :src="item.image"
+            class="img-fluid img-small"
+            alt="Product Image"
+          >
+          <div />
+        </div>
+        <div class="col-md-3">
+          <p>{{ item.name }}</p>
+        </div>
+        <div class="col-md-2">
+          <p>R$ {{ item.price }}</p>
+        </div>
+        <div class="col-md-2">
+          <button
+            @click="decrementQuantity(index)"
+            class="btn btn-outline-primary"
+          >
+            -
+          </button>
+          <span>{{ item.quantity }}</span>
+          <button
+            @click="incrementQuantity(index)"
+            class="btn btn-outline-primary"
+          >
+            +
+          </button>
+        </div>
+        <div class="col-md-2">
+          <p>R$ {{ item.price * item.quantity }}</p>
+        </div>
+        <div class="col-md-1">
+          <i
+            class="bi bi-trash3 text-danger fs-5"
+            @click="removeFromCart(index)"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-12">
+          <p class="text-end">
+            <strong>Total:</strong> R$ {{ getTotalPrice().toFixed(2) }}
+          </p>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-12 text-end">
+          <button
+            @click="checkout"
+            class="btn btn-primary"
+          >
+            Finalizar Compra
+          </button>
+        </div>
+      </div>
+    </div>
+    <ModalDefault @formSubmitted="handleFormSubmitted" />
+  </div>
+</template>
+
+<script lang="ts">
+
+import AlertMessage from '@/components/AlertMessage.vue';
+import ModalDefault from '@/components/ModalDefault.vue';
+import type { ProductsCart } from '@/core/models';
+// import type { Client, ProductsCart, ProductsClient } from '@/core/models';
+import { ProductCart } from '@/core/services';
+import { Order } from '@/core/services/order';
+
+
+export default {
+  components: { 
+    ModalDefault,
+    AlertMessage
+  },
+  
+  data() {
+    return {
+      cart: [] as ProductsCart[],
+      alertMessage: {
+        message: 'information saved successfully',
+        showAlert: false,
+        typeMessage: '',
+      }
+    };
+  },
+
+  created() {
+    this.cart = new ProductCart().getProductsCart();
+  },
+
+  methods: {
+    incrementQuantity(index: any) {
+      this.cart[index].quantity++;
+    },
+    decrementQuantity(index: any) {
+      if (this.cart[index].quantity > 1) {
+        this.cart[index].quantity--;
+      }
+    },
+    removeFromCart(index: any) {
+      this.cart.splice(index, 1);
+    },
+    getTotalPrice() {
+      return this.cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    },
+
+    handleFormSubmitted(data: any) {
+      // this.spinner = true;
+      // const order = this.createClientData(data);
+      // this.finishOrder(order);
+    },
+    checkout() {
+      // Lógica para finalizar a compra
+      console.log('Compra finalizada');
+    }
+  }
+};
+</script>
+
+<style scoped>
+.img-small {
+  max-width: 40%;
+}
 </style>
+

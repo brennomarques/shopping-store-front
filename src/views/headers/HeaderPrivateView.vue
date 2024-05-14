@@ -53,6 +53,8 @@
           </li>
         </ul>
 
+        <ShoppingCart />
+
         <div
           class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3"
           role="search"
@@ -109,10 +111,14 @@
   </header>
 </template>
 <script lang="ts">
-import { Authorization } from '@/core/services';
+import ShoppingCart from '@/components/ShoppingCart.vue';
+import { Authorization, ProductCart } from '@/core/services';
 import { Logout } from '@/core/services/logout';
 
 export default {
+  components: {
+    ShoppingCart
+  },
   data() {
     return {
       user: {
@@ -124,6 +130,7 @@ export default {
 
   created() {
     this.prepareUser();
+    this.watchCart();
   },
   methods: {
     prepareUser() {
@@ -132,6 +139,11 @@ export default {
         username: user!.name,
         email: user!.email,
       };
+    },
+
+    watchCart() {
+      const product = new ProductCart().getProductsCart();
+      console.log(product);
     },
 
     async logout(){
