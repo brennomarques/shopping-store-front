@@ -8,12 +8,36 @@
     <span
       class="badge bg-danger rounded-pill d-flex justify-content-center align-items-center bubble"
     >
-      5 
+      {{ count }} 
     </span>
   </div>
 </template>
-<script>
+<script lang="ts">
+import { ProductCart } from '@/core/services';
+import { store } from '@/store';
+
 export default {
+  data() {
+    return {
+    };
+  },
+
+  computed: {
+    count() {
+      return store.state.count; 
+    },
+  },
+
+  created() {
+    this.prepareUser();
+  },
+
+  methods: {
+    prepareUser() {
+      const productCart = new ProductCart().getProductsCart();
+      store.commit('setCount', productCart.length);
+    },
+  }
     
 };
 </script>

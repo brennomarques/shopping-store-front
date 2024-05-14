@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
+import { store, key } from './store';
 
 // Themes
 import './themes/main.css';
@@ -17,5 +18,6 @@ const app = createApp(App);
 app.component('FaIcon', FontAwesomeIcon);
 
 app.use(router);
+app.use(store, key);
 
 app.mount('#app');

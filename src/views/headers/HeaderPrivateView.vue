@@ -53,7 +53,10 @@
           </li>
         </ul>
 
-        <ShoppingCart />
+        <router-link to="/order">
+          <ShoppingCart />
+        </router-link>
+        
 
         <div
           class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3"

@@ -332,10 +332,19 @@ export default {
       <div class="row mt-4">
         <div class="col-md-12 text-end">
           <button
-            @click="checkout"
-            class="btn btn-primary"
+            v-if="cart.length"
+            class="btn btn-primary mt-2"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+            type="button"
+            :disabled="hasSpinner"
           >
-            Finalizar Compra
+            <span
+              v-if="hasSpinner"
+              class="spinner-border spinner-border-sm"
+              aria-hidden="true"
+            />
+            <span> Finalizar Compra</span>
           </button>
         </div>
       </div>
@@ -348,10 +357,11 @@ export default {
 
 import AlertMessage from '@/components/AlertMessage.vue';
 import ModalDefault from '@/components/ModalDefault.vue';
-import type { ProductsCart } from '@/core/models';
+import type { Client, ProductsCart, ProductsClient } from '@/core/models';
 // import type { Client, ProductsCart, ProductsClient } from '@/core/models';
 import { ProductCart } from '@/core/services';
 import { Order } from '@/core/services/order';
+import { store } from '@/store';
 
 
 export default {
@@ -363,6 +373,7 @@ export default {
   data() {
     return {
       cart: [] as ProductsCart[],
+      spinner: false,
       alertMessage: {
         message: 'information saved successfully',
         showAlert: false,
@@ -375,30 +386,102 @@ export default {
     this.cart = new ProductCart().getProductsCart();
   },
 
+  computed: {
+    hasSpinner() {
+      return this.spinner;
+    },
+  },
+
   methods: {
+
+    showMessage(msg: string, typeMessage: string) {
+      this.alertMessage = {
+        message: msg,
+        showAlert: true,
+        typeMessage: typeMessage,
+      };
+
+      setTimeout(() => {
+        this.alertMessage.showAlert = false;
+      }, 4000);
+    },
+
     incrementQuantity(index: any) {
       this.cart[index].quantity++;
+      new ProductCart().updateProductToCart(this.cart);
     },
+
     decrementQuantity(index: any) {
       if (this.cart[index].quantity > 1) {
         this.cart[index].quantity--;
+        new ProductCart().updateProductToCart(this.cart);
       }
     },
+
     removeFromCart(index: any) {
       this.cart.splice(index, 1);
+      new ProductCart().updateProductToCart(this.cart);
+      this.showMessage('O item foi removido do carrinho.', 'success');
+      store.commit('decrement');
     },
+
     getTotalPrice() {
       return this.cart.reduce((total, item) => total + item.price * item.quantity, 0);
     },
 
     handleFormSubmitted(data: any) {
-      // this.spinner = true;
-      // const order = this.createClientData(data);
-      // this.finishOrder(order);
+      this.spinner = true;
+      const order = this.createClientData(data);
+      this.finishOrder(order);
     },
+
     checkout() {
       // Lógica para finalizar a compra
       console.log('Compra finalizada');
+    },
+
+    appendCurrentTimeToDate(dateString: string) {
+      const currentDate = new Date();
+      const hours = String(currentDate.getHours()).padStart(2, '0');
+      const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+      const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+      const currentTime = `${hours}:${minutes}:${seconds}`;
+      const dateTime = `${dateString} ${currentTime}`;
+      return dateTime;
+    },
+
+    createClientData(data: any): Client {
+      const productsCart = new ProductCart().getProductsCart();
+
+      const clientData: Client = {
+        name: data.clientName, 
+        delivery_at: this.appendCurrentTimeToDate(data.deliveryDate), 
+        products: productsCart.map(product => {
+          const productData: ProductsClient = {
+            id: product.id,
+            quantity: product.quantity
+          };
+          return productData;
+        })
+      };
+
+      return clientData;
+    },
+
+    async finishOrder(order: Client) {
+      await new Order().createOrder(order)
+        .then(() => {
+          this.spinner = false;
+          new ProductCart().cleanCart();
+          this.cart = [];
+          store.commit('setCount', 0);
+          this.showMessage('Parabéns! Sua compra foi realizada com sucesso. Agora, aguarde a entrega do produto na data informada.', 'success');
+        })
+        .catch(error => {
+          this.spinner = false;
+          this.showMessage(error.response.data.message, 'error');          
+        });
+
     }
   }
 };

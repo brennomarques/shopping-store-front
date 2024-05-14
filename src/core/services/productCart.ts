@@ -23,8 +23,18 @@ export class ProductCart {
   }
 
   public addProductToCart(product: ProductsCart) {
-    this.productInCart.push(product);
+
+    const existingProduct = this.productInCart.find(item => item.id === product.id);
+
+    if (!existingProduct) {
+      this.productInCart.push(product);
+      this.saveCartToStorage();
+      return;
+    }
+
+    existingProduct.quantity += product.quantity;
     this.saveCartToStorage();
+
   }
 
   public updateProductToCart(products: ProductsCart[]) {

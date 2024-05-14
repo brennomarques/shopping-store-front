@@ -86,7 +86,6 @@ export default {
     async orderHistory() {
       await new Order().getAll('status=1')
         .then((data) => {
-          console.log(data);
           this.purchases = data;
         })
         .catch(error => {

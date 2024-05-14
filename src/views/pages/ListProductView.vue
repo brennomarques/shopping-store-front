@@ -198,6 +198,7 @@ import type { ProductsCart, ProductsResponse } from '@/core/models';
 import { ProductCart } from '@/core/services';
 import { Product } from '@/core/services/product';
 import AlertMessage from '@/components/AlertMessage.vue';
+import { store } from '@/store';
 
 export default {
   components: {
@@ -219,10 +220,16 @@ export default {
   },
 
   methods: {
+
+    incrementCount() {
+      store.commit('increment'); 
+    },
+
     addToCart(item: ProductsResponse) {
       this.clickEffect(item);      
-      console.log('Item added to cart:', item);
       this.addProductToCart(item);
+      this.incrementCount();
+      this.showMessage('Produto adicionado ao carrinho.', 'success');
     },
 
     addProductToCart(product: ProductsResponse) {
@@ -260,7 +267,6 @@ export default {
       try {
         const responseData = await new Product().getAll();
         this.products = responseData; 
-        console.log(responseData);       
       } catch (error) {
         console.error(error);
         this.showMessage('Não foi possível obter a lista de produtos. Por favor, tente novamente.', 'error');
